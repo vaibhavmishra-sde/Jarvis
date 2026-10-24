@@ -43,6 +43,23 @@ class ChatApiTests(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Conversation.objects.count(), 0)
 
+    def test_chat_api_rejects_oversized_prompt(self):
+        page = self.client.get("/")
+        csrf_token = page.cookies["csrftoken"].value
+        response = self.client.post(
+            "/api/chat/",
+            data=json.dumps({"message": "x" * 4001}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=csrf_token,
+        )
+        self.assertEqual(response.status_code, 413)
+        self.assertEqual(Conversation.objects.count(), 0)
+
+    def test_health_endpoint_reports_database(self):
+        response = self.client.get("/api/health/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["database"], "ok")
+
     def test_chat_api_accepts_valid_csrf_token(self):
         page = self.client.get("/")
         csrf_token = page.cookies["csrftoken"].value
