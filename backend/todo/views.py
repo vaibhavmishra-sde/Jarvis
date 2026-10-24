@@ -14,10 +14,12 @@ from datetime import timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, StreamingHttpResponse
 from .models import Conversation, ChatMessage, TodoItem, Note, Reminder, Memory
+from .skills import list_skills
 
 logger = logging.getLogger(__name__)
 
 MAX_HISTORY_TURNS = 12
+MAX_PROMPT_LENGTH = 4000
 
 def local_command(prompt):
     """Handle simple Level 1 commands without requiring an AI provider."""
@@ -25,9 +27,11 @@ def local_command(prompt):
     now = datetime.now()
 
     if re.fullmatch(r'(help|commands|what can you do|capabilities)\s*[?.!]*', text):
+        skill_names = ', '.join(skill['name'].replace('_', ' ') for skill in list_skills())
         return ("### Level 1 capabilities\n\n"
                 "- Time and date\n- Jokes and greetings\n- Web and Wikipedia search\n"
                 "- YouTube and music lookup\n- Open supported websites\n\n"
+                f"Registered skills: {skill_names}.\n\n"
                 "Try: `what time is it`, `search for Python`, or `play jazz music`.")
     if re.search(r'\b(hello|hi|hey|good morning|good evening)\b', text):
         return f"Hello. JARVIS is ready. It is **{now.strftime('%I:%M %p')}**. How can I help?"
@@ -183,13 +187,14 @@ def health_api(request):
             cursor.execute('SELECT 1')
     except Exception:
         database = 'error'
+    config = provider_config()
     return JsonResponse({
         'status': 'ok' if database == 'ok' else 'degraded',
         'service': 'jarvis-api',
         'database': database,
-        'provider': provider_config()['base_url'],
-        'model': provider_config()['model'],
-        'ai_configured': bool(provider_config()['api_key']),
+        'provider': config['base_url'],
+        'model': config['model'],
+        'ai_configured': bool(config['api_key']),
         'conversations': Conversation.objects.count(),
         'messages': ChatMessage.objects.count(),
     }, status=200 if database == 'ok' else 503)
@@ -235,6 +240,12 @@ def briefing_api(request):
         result['warnings'].append('News is temporarily unavailable.')
     return JsonResponse(result)
 
+
+def skills_api(request):
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Only GET allowed'}, status=405)
+    return JsonResponse({'skills': list_skills()})
+
 def export_conversation(request, conversation_id):
     """Export a conversation as JSON for debugging, handoff, or archival."""
     conversation = get_object_or_404(Conversation, id=conversation_id)
@@ -273,6 +284,8 @@ def chat_api(request):
 
         if not prompt:
             return JsonResponse({"error": "Message content is required"}, status=400)
+        if len(prompt) > MAX_PROMPT_LENGTH:
+            return JsonResponse({"error": f"Message must be {MAX_PROMPT_LENGTH} characters or fewer"}, status=413)
 
         # Get or create conversation
         if conversation_id:
