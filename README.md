@@ -16,6 +16,8 @@ $env:AI_BASE_URL = "https://api.openai.com/v1"
 $env:AI_MODEL = "gpt-4o-mini"
 ```
 
+For a complete local configuration reference, copy `.env.example` to your environment and replace the development secret key. In production, set `DJANGO_DEBUG=false` and provide an explicit `DJANGO_ALLOWED_HOSTS` list.
+
 Any compatible gateway can be used by changing `AI_BASE_URL` and `AI_MODEL`.
 
 ## Run
@@ -40,6 +42,8 @@ to-dos, notes, reminders, persistent memories, weather, and a news briefing. Use
 command console to see the local skills.
 
 The JSON endpoints are `/api/health/`, `/api/productivity/`, and `/api/briefing/?location=New%20Delhi`.
+
+Chat prompts are limited to 4,000 characters to keep provider requests predictable. The health endpoint includes database connectivity and AI configuration status for lightweight monitoring.
 
 ## Adding a skill
 
