@@ -73,7 +73,7 @@ def local_command(prompt):
         'youtube': 'https://www.youtube.com',
         'gmail': 'https://mail.google.com',
         'github': 'https://github.com',
-        ' wikipedia': 'https://www.wikipedia.org',
+        'wikipedia': 'https://www.wikipedia.org',
     }
     for name, url in shortcuts.items():
         if re.search(rf'\bopen\s+{re.escape(name.strip())}\b', text):
