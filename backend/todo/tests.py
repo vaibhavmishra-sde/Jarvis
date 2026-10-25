@@ -23,6 +23,9 @@ class LocalCommandTests(TestCase):
     def test_youtube_command(self):
         self.assertIn("youtube.com/results", local_command("play jazz").lower())
 
+    def test_wikipedia_shortcut_command(self):
+        self.assertIn("wikipedia.org", local_command("open wikipedia").lower())
+
     def test_productivity_commands_are_persisted(self):
         from .views import execute_productivity_command
         self.assertIn("Added", execute_productivity_command("add milk to my list"))
