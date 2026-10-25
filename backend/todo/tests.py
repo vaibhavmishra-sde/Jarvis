@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.test import Client, TestCase
 
-from .models import ChatMessage, Conversation
+from .models import ChatMessage, Conversation, TodoItem
 from .views import local_command
 
 
@@ -75,5 +75,32 @@ class ChatApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ChatMessage.objects.count(), 2)
         self.assertEqual(response.json()["ai_message"]["content"], "Hello, commander.")
+
+
+class TodoApiTests(TestCase):
+    def setUp(self):
+        self.todo = TodoItem.objects.create(title='Ship the update')
+
+    def test_todo_can_be_completed(self):
+        response = self.client.patch(
+            f'/api/productivity/todos/{self.todo.id}/',
+            data=json.dumps({'completed': True}),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.todo.refresh_from_db()
+        self.assertTrue(self.todo.completed)
+
+    def test_todo_rejects_invalid_completion_value(self):
+        response = self.client.patch(
+            f'/api/productivity/todos/{self.todo.id}/',
+            data=json.dumps({'completed': 'yes'}),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.todo.refresh_from_db()
+        self.assertFalse(self.todo.completed)
 
 # Create your tests here.
