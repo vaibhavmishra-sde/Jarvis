@@ -41,6 +41,7 @@ class TodoItem(models.Model):
 
     class Meta:
         ordering = ['completed', '-created_at']
+        indexes = [models.Index(fields=['completed', '-created_at'])]
 
 
 class Note(models.Model):
@@ -61,6 +62,7 @@ class Reminder(models.Model):
 
     class Meta:
         ordering = ['fired', 'due_at']
+        indexes = [models.Index(fields=['fired', 'due_at'])]
 
 
 class Memory(models.Model):
