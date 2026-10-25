@@ -212,6 +212,22 @@ def productivity_api(request):
     }, default=str)
 
 
+def todo_api(request, todo_id):
+    """Update one task without exposing a broad write endpoint."""
+    if request.method != 'PATCH':
+        return JsonResponse({'error': 'Only PATCH allowed'}, status=405)
+    todo = get_object_or_404(TodoItem, id=todo_id)
+    try:
+        data = json.loads(request.body or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Request body must be valid JSON'}, status=400)
+    if 'completed' not in data or not isinstance(data['completed'], bool):
+        return JsonResponse({'error': 'completed must be a boolean'}, status=400)
+    todo.completed = data['completed']
+    todo.save(update_fields=['completed'])
+    return JsonResponse({'id': todo.id, 'title': todo.title, 'completed': todo.completed})
+
+
 def briefing_api(request):
     """Fetch optional no-key weather/news data with graceful failure."""
     location = request.GET.get('location', 'New Delhi').strip()[:80]
