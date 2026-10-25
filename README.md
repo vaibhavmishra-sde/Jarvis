@@ -57,6 +57,12 @@ For a small local command, add a focused matcher/handler in `backend/todo/views.
 with a test in `backend/todo/tests.py`. For persistent data, add a model and migration, then expose
 only the smallest required API endpoint. Keep secrets in environment variables; never commit keys.
 
+## Website shortcuts
+
+Jarvis can open commonly used websites directly from the command console. Try
+`open google`, `open youtube`, `open gmail`, `open github`, or `open wikipedia`.
+For other sites, use a full domain such as `open example.com`.
+
 ## Voice and audio
 
 Use Chrome or Edge on `127.0.0.1` and allow microphone access. `START VOICE` enables speech
