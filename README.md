@@ -43,7 +43,13 @@ command console to see the local skills.
 
 The JSON endpoints are `/api/health/`, `/api/productivity/`, and `/api/briefing/?location=New%20Delhi`.
 
+Tasks can be marked complete with a JSON `PATCH` request to
+`/api/productivity/todos/<id>/` using `{"completed": true}`. The endpoint validates the
+payload and updates only the completion field.
+
 Chat prompts are limited to 4,000 characters to keep provider requests predictable. The health endpoint includes database connectivity and AI configuration status for lightweight monitoring.
+
+Run the test suite with `python backend/manage.py test todo`.
 
 ## Adding a skill
 
