@@ -22,9 +22,21 @@ Any compatible gateway can be used by changing `AI_BASE_URL` and `AI_MODEL`.
 
 ## Run
 
+For a fresh Windows checkout, run the setup script once:
+
 ```powershell
-python backend/manage.py migrate
-python backend/manage.py runserver
+.\setup-backend.ps1
+```
+
+The script creates `.venv`, installs dependencies, creates `.env` from the
+example configuration, applies migrations, and runs Django's system checks.
+The backend reads `.env` automatically; process-level environment variables
+still take precedence.
+
+Start the development server with:
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py runserver 127.0.0.1:8000
 ```
 
 The health probe is available at `GET /api/health/` and reports database, provider, model, and configuration status.
