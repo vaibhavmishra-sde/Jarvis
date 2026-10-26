@@ -605,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVoicePreferences();
     setupQuickActions();
     refreshProductivitySummary();
+    refreshMetrics();
     document.getElementById('refreshProductivity')?.addEventListener('click', refreshProductivitySummary);
     document.addEventListener('keydown', (event) => {
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -669,6 +670,20 @@ async function refreshProductivitySummary() {
     } catch (error) {
         if (nextReminder) nextReminder.textContent = 'PRODUCTIVITY LINK UNAVAILABLE';
         console.debug('Productivity summary unavailable', error);
+    }
+}
+
+async function refreshMetrics() {
+    try {
+        const response = await fetch('/api/metrics/');
+        if (!response.ok) return;
+        const data = await response.json();
+        const memory = document.getElementById('memoryReadout');
+        const link = document.getElementById('linkReadout');
+        if (memory) memory.textContent = `${data.messages} MSG`;
+        if (link) link.textContent = `${data.conversations} THREAD${data.conversations === 1 ? '' : 'S'}`;
+    } catch (error) {
+        console.debug('Metrics unavailable', error);
     }
 }
 
