@@ -40,6 +40,7 @@ Start the development server with:
 ```
 
 The health probe is available at `GET /api/health/` and reports database, provider, model, and configuration status.
+The compact command-center metrics endpoint is available at `GET /api/metrics/`.
 
 ## Structure
 

@@ -63,6 +63,12 @@ class ChatApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["database"], "ok")
 
+    def test_metrics_endpoint_reports_counts(self):
+        Conversation.objects.create(title='Metrics thread')
+        response = self.client.get('/api/metrics/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['conversations'], 1)
+
     def test_chat_api_accepts_valid_csrf_token(self):
         page = self.client.get("/")
         csrf_token = page.cookies["csrftoken"].value
