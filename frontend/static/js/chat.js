@@ -604,6 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVoiceControls();
     setupVoicePreferences();
     setupQuickActions();
+    refreshProductivitySummary();
     document.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', () => {
             const input = document.getElementById('promptInput');
@@ -632,6 +633,22 @@ function setupQuickActions() {
         dock.appendChild(button);
     });
     form.insertBefore(dock, form.firstElementChild);
+}
+
+async function refreshProductivitySummary() {
+    try {
+        const response = await fetch('/api/productivity/');
+        if (!response.ok) return;
+        const data = await response.json();
+        const mission = document.querySelector('.mission-strip > div:first-child strong');
+        if (mission) {
+            const openTasks = (data.todos || []).filter(item => !item.completed).length;
+            const reminders = (data.reminders || []).length;
+            mission.textContent = `${openTasks} OPEN TASK${openTasks === 1 ? '' : 'S'} · ${reminders} REMINDER${reminders === 1 ? '' : 'S'}`;
+        }
+    } catch (error) {
+        console.debug('Productivity summary unavailable', error);
+    }
 }
 
 function playStartupSoundOnce() {
