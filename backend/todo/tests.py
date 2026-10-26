@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.test import Client, TestCase
 
-from .models import ChatMessage, Conversation, TodoItem
+from .models import ChatMessage, Conversation, TodoItem, Note, Reminder
 from .views import local_command
 
 
@@ -105,5 +105,23 @@ class TodoApiTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.todo.refresh_from_db()
         self.assertFalse(self.todo.completed)
+
+    def test_productivity_write_api_creates_note(self):
+        response = self.client.post(
+            '/api/productivity/write/',
+            data=json.dumps({'kind': 'note', 'title': 'Launch plan', 'content': 'Review milestones'}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Note.objects.get().title, 'Launch plan')
+
+    def test_productivity_write_api_requires_reminder_date(self):
+        response = self.client.post(
+            '/api/productivity/write/',
+            data=json.dumps({'kind': 'reminder', 'title': 'Stand up'}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Reminder.objects.count(), 0)
 
 # Create your tests here.

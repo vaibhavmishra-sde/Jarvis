@@ -373,6 +373,9 @@ def chat_api(request):
                 "created_at": ai_msg.created_at.strftime("%H:%M")
             }
     })
+    except Exception as e:
+        logger.error(f"Error in chat_api: {e}")
+        return JsonResponse({"error": str(e)}, status=500)
 
 def productivity_write_api(request):
     """Create a note or reminder from the command-deck productivity panel."""
@@ -396,6 +399,3 @@ def productivity_write_api(request):
         reminder = Reminder.objects.create(title=title, due_at=due_at)
         return JsonResponse({'kind': kind, 'id': reminder.id, 'title': reminder.title}, status=201)
     return JsonResponse({'error': 'kind must be note or reminder'}, status=400)
-    except Exception as e:
-        logger.error(f"Error in chat_api: {e}")
-        return JsonResponse({"error": str(e)}, status=500)
