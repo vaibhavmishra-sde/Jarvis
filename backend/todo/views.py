@@ -372,7 +372,30 @@ def chat_api(request):
                 "content": ai_msg.content,
                 "created_at": ai_msg.created_at.strftime("%H:%M")
             }
-        })
+    })
+
+def productivity_write_api(request):
+    """Create a note or reminder from the command-deck productivity panel."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST allowed'}, status=405)
+    try:
+        payload = json.loads(request.body or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    kind = payload.get('kind')
+    title = str(payload.get('title', '')).strip()
+    if not title:
+        return JsonResponse({'error': 'A title is required'}, status=400)
+    if kind == 'note':
+        item = Note.objects.create(title=title, content=str(payload.get('content', title)).strip())
+        return JsonResponse({'kind': kind, 'id': item.id, 'title': item.title}, status=201)
+    if kind == 'reminder':
+        due_at = payload.get('due_at')
+        if not due_at:
+            return JsonResponse({'error': 'due_at is required for reminders'}, status=400)
+        reminder = Reminder.objects.create(title=title, due_at=due_at)
+        return JsonResponse({'kind': kind, 'id': reminder.id, 'title': reminder.title}, status=201)
+    return JsonResponse({'error': 'kind must be note or reminder'}, status=400)
     except Exception as e:
         logger.error(f"Error in chat_api: {e}")
         return JsonResponse({"error": str(e)}, status=500)

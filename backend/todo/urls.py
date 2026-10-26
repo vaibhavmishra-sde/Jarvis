@@ -9,6 +9,7 @@ urlpatterns = [
     path("api/chat/", views.chat_api, name="chat_api"),
     path("api/health/", views.health_api, name="health_api"),
     path("api/productivity/", views.productivity_api, name="productivity_api"),
+    path("api/productivity/write/", views.productivity_write_api, name="productivity_write_api"),
     path("api/productivity/todos/<int:todo_id>/", views.todo_api, name="todo_api"),
     path("api/briefing/", views.briefing_api, name="briefing_api"),
     path("api/skills/", views.skills_api, name="skills_api"),
