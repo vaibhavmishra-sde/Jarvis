@@ -417,6 +417,9 @@ async function handleSend(e) {
 
     const prompt = input.value.trim();
     if (!prompt) return;
+    document.body.classList.add('is-processing');
+    const coreState = document.getElementById('coreState');
+    if (coreState) coreState.textContent = 'PROCESSING REQUEST';
 
     const conversationIdInput = document.getElementById('conversationId');
     const container = document.getElementById('messagesContainer');
@@ -570,6 +573,8 @@ async function handleSend(e) {
         input.disabled = false;
         if (sendBtn) sendBtn.disabled = false;
         input.focus();
+        document.body.classList.remove('is-processing');
+        if (coreState) coreState.textContent = 'WAITING FOR COMMAND';
     }
 
     scrollToBottom();
@@ -599,6 +604,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVoiceControls();
     setupVoicePreferences();
     setupQuickActions();
+    document.querySelectorAll('[data-command]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const input = document.getElementById('promptInput');
+            if (!input) return;
+            input.value = button.dataset.command || '';
+            input.focus();
+            input.dispatchEvent(new Event('input'));
+        });
+    });
     refreshRuntimeStatus();
 });
 
