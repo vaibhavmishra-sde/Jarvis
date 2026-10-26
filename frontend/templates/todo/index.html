@@ -33,6 +33,12 @@
     <div class="side-readout right-data">TOOLS MODULE <b>READY</b><br>THREAT LEVEL <b>LOW</b><br>LATENCY <b>1.8s</b></div>
   </section>
 
+  <section class="mission-strip" aria-label="Current mission summary">
+    <div><span class="strip-label">CURRENT MISSION</span><strong>COMMAND CENTER READY</strong></div>
+    <div><span class="strip-label">ACTIVE THREAD</span><strong>{% if active_conversation %}{{ active_conversation.title }}{% else %}NEW SESSION{% endif %}</strong></div>
+    <div><span class="strip-label">LOCAL MODE</span><strong>ENABLED</strong></div>
+  </section>
+
   <section class="capability-rail" aria-label="Available capabilities">
     <span class="rail-label">LEVEL 01 / AVAILABLE</span>
     <span>⌚ TIME</span><span>◫ DATE</span><span>◎ WEB</span><span>▶ MEDIA</span>
