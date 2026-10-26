@@ -606,6 +606,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setupQuickActions();
     refreshProductivitySummary();
     document.getElementById('refreshProductivity')?.addEventListener('click', refreshProductivitySummary);
+    document.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
+            document.getElementById('promptInput')?.focus();
+        }
+        if (event.key === 'Escape' && document.activeElement?.id === 'promptInput') {
+            document.getElementById('promptInput').value = '';
+        }
+    });
     document.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', () => {
             const input = document.getElementById('promptInput');
