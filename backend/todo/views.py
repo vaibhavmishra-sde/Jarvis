@@ -199,6 +199,18 @@ def health_api(request):
         'messages': ChatMessage.objects.count(),
     }, status=200 if database == 'ok' else 503)
 
+def metrics_api(request):
+    """Return compact counts for the command-center overview."""
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Only GET allowed'}, status=405)
+    return JsonResponse({
+        'conversations': Conversation.objects.count(),
+        'messages': ChatMessage.objects.count(),
+        'open_tasks': TodoItem.objects.filter(completed=False).count(),
+        'notes': Note.objects.count(),
+        'pending_reminders': Reminder.objects.filter(fired=False).count(),
+    })
+
 
 def productivity_api(request):
     """Read-only dashboard data for tasks, notes, and pending reminders."""
