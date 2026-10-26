@@ -605,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVoicePreferences();
     setupQuickActions();
     refreshProductivitySummary();
+    document.getElementById('refreshProductivity')?.addEventListener('click', refreshProductivitySummary);
     document.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', () => {
             const input = document.getElementById('promptInput');
@@ -644,6 +645,14 @@ async function refreshProductivitySummary() {
         if (mission) {
             const openTasks = (data.todos || []).filter(item => !item.completed).length;
             const reminders = (data.reminders || []).length;
+            const todoCount = document.getElementById('todoCount');
+            const noteCount = document.getElementById('noteCount');
+            const reminderCount = document.getElementById('reminderCount');
+            const nextReminder = document.getElementById('nextReminder');
+            if (todoCount) todoCount.textContent = openTasks;
+            if (noteCount) noteCount.textContent = (data.notes || []).length;
+            if (reminderCount) reminderCount.textContent = reminders;
+            if (nextReminder) nextReminder.textContent = reminders ? `NEXT: ${data.reminders[0].title}` : 'NO UPCOMING REMINDERS';
             mission.textContent = `${openTasks} OPEN TASK${openTasks === 1 ? '' : 'S'} · ${reminders} REMINDER${reminders === 1 ? '' : 'S'}`;
         }
     } catch (error) {

@@ -39,6 +39,16 @@
     <div><span class="strip-label">LOCAL MODE</span><strong>ENABLED</strong></div>
   </section>
 
+  <aside class="productivity-panel" aria-label="Productivity snapshot">
+    <div class="productivity-head"><span>PERSONAL OPS</span><button id="refreshProductivity" type="button" aria-label="Refresh productivity">↻</button></div>
+    <div class="productivity-grid">
+      <div><strong id="todoCount">—</strong><span>OPEN TASKS</span></div>
+      <div><strong id="noteCount">—</strong><span>NOTES</span></div>
+      <div><strong id="reminderCount">—</strong><span>REMINDERS</span></div>
+    </div>
+    <div id="nextReminder" class="next-reminder">Syncing personal data…</div>
+  </aside>
+
   <section class="capability-rail" aria-label="Available capabilities">
     <span class="rail-label">LEVEL 01 / AVAILABLE</span>
     <span>⌚ TIME</span><span>◫ DATE</span><span>◎ WEB</span><span>▶ MEDIA</span>
