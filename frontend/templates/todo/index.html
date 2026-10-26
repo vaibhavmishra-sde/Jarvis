@@ -39,7 +39,7 @@
   </section>
 
   <section class="voice-console tactical-core" aria-label="JARVIS neural core">
-    <div class="core-title"><span>J.A.R.V.I.S. CORE</span><b>WAITING FOR COMMAND</b></div>
+    <div class="core-title"><span>J.A.R.V.I.S. CORE</span><b id="coreState">WAITING FOR COMMAND</b></div>
     <div class="core-visual"><div class="core-node"><span>JARVIS</span><small>AI CORE · v0.3.0</small></div></div>
     <div class="voice-actions">
       <button class="voice-command" id="voiceToggle" type="button" aria-pressed="false">◉ START VOICE</button>
@@ -56,6 +56,12 @@
     </div>
     <form id="chatForm" onsubmit="handleSend(event)">
       {% csrf_token %}<input type="hidden" id="conversationId" value="{% if active_conversation %}{{ active_conversation.id }}{% endif %}">
+      <div class="quick-actions" aria-label="Quick commands">
+        <button type="button" data-command="What time is it?">TIME</button>
+        <button type="button" data-command="What is today's date?">DATE</button>
+        <button type="button" data-command="Tell me a joke">JOKE</button>
+        <button type="button" data-command="Help">HELP</button>
+      </div>
       <div class="transmit-bar"><span>⌁</span><textarea id="promptInput" rows="1" placeholder="Speak or type a command to Jarvis..." aria-label="Command for JARVIS" onkeydown="checkEnter(event)"></textarea><button id="sendBtn" type="submit" aria-label="Transmit command">TRANSMIT ↑</button></div>
     </form>
   </section>
