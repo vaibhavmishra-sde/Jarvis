@@ -646,6 +646,8 @@ function setupQuickActions() {
 }
 
 async function refreshProductivitySummary() {
+    const nextReminder = document.getElementById('nextReminder');
+    if (nextReminder) nextReminder.textContent = 'SYNCING PERSONAL DATA…';
     try {
         const response = await fetch('/api/productivity/');
         if (!response.ok) return;
@@ -665,6 +667,7 @@ async function refreshProductivitySummary() {
             mission.textContent = `${openTasks} OPEN TASK${openTasks === 1 ? '' : 'S'} · ${reminders} REMINDER${reminders === 1 ? '' : 'S'}`;
         }
     } catch (error) {
+        if (nextReminder) nextReminder.textContent = 'PRODUCTIVITY LINK UNAVAILABLE';
         console.debug('Productivity summary unavailable', error);
     }
 }
