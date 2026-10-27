@@ -604,6 +604,18 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVoiceControls();
     setupVoicePreferences();
     setupQuickActions();
+    refreshProductivitySummary();
+    refreshMetrics();
+    document.getElementById('refreshProductivity')?.addEventListener('click', refreshProductivitySummary);
+    document.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
+            document.getElementById('promptInput')?.focus();
+        }
+        if (event.key === 'Escape' && document.activeElement?.id === 'promptInput') {
+            document.getElementById('promptInput').value = '';
+        }
+    });
     document.querySelectorAll('[data-command]').forEach((button) => {
         button.addEventListener('click', () => {
             const input = document.getElementById('promptInput');
@@ -632,6 +644,47 @@ function setupQuickActions() {
         dock.appendChild(button);
     });
     form.insertBefore(dock, form.firstElementChild);
+}
+
+async function refreshProductivitySummary() {
+    const nextReminder = document.getElementById('nextReminder');
+    if (nextReminder) nextReminder.textContent = 'SYNCING PERSONAL DATA…';
+    try {
+        const response = await fetch('/api/productivity/');
+        if (!response.ok) return;
+        const data = await response.json();
+        const mission = document.querySelector('.mission-strip > div:first-child strong');
+        if (mission) {
+            const openTasks = (data.todos || []).filter(item => !item.completed).length;
+            const reminders = (data.reminders || []).length;
+            const todoCount = document.getElementById('todoCount');
+            const noteCount = document.getElementById('noteCount');
+            const reminderCount = document.getElementById('reminderCount');
+            const nextReminder = document.getElementById('nextReminder');
+            if (todoCount) todoCount.textContent = openTasks;
+            if (noteCount) noteCount.textContent = (data.notes || []).length;
+            if (reminderCount) reminderCount.textContent = reminders;
+            if (nextReminder) nextReminder.textContent = reminders ? `NEXT: ${data.reminders[0].title}` : 'NO UPCOMING REMINDERS';
+            mission.textContent = `${openTasks} OPEN TASK${openTasks === 1 ? '' : 'S'} · ${reminders} REMINDER${reminders === 1 ? '' : 'S'}`;
+        }
+    } catch (error) {
+        if (nextReminder) nextReminder.textContent = 'PRODUCTIVITY LINK UNAVAILABLE';
+        console.debug('Productivity summary unavailable', error);
+    }
+}
+
+async function refreshMetrics() {
+    try {
+        const response = await fetch('/api/metrics/');
+        if (!response.ok) return;
+        const data = await response.json();
+        const memory = document.getElementById('memoryReadout');
+        const link = document.getElementById('linkReadout');
+        if (memory) memory.textContent = `${data.messages} MSG`;
+        if (link) link.textContent = `${data.conversations} THREAD${data.conversations === 1 ? '' : 'S'}`;
+    } catch (error) {
+        console.debug('Metrics unavailable', error);
+    }
 }
 
 function playStartupSoundOnce() {

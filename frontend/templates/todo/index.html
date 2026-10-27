@@ -17,7 +17,7 @@
   <header class="jarvis-header">
     <div class="micro-brand"><span>J.A.R.V.I.S.</span><small>TACTICAL INTELLIGENCE SYSTEM</small></div>
     <div class="header-readout" aria-label="System telemetry">
-      <span>POWER <b>98.4%</b></span><span>MEMORY <b>92%</b></span><span>LINK <b>SECURE</b></span>
+      <span>POWER <b>98.4%</b></span><span>MEMORY <b id="memoryReadout">92%</b></span><span>LINK <b id="linkReadout">SECURE</b></span>
     </div>
     <div class="top-status">
       <span class="audio-toggle" id="audioToggle">◉ AUDIO READY</span>
@@ -32,6 +32,22 @@
     <div class="side-readout left-data">REASONING NODE <b>CONNECTED</b><br>CONTEXT WINDOW <b>12 TURNS</b><br>VOICE CHANNEL <b>READY</b></div>
     <div class="side-readout right-data">TOOLS MODULE <b>READY</b><br>THREAT LEVEL <b>LOW</b><br>LATENCY <b>1.8s</b></div>
   </section>
+
+  <section class="mission-strip" aria-label="Current mission summary">
+    <div><span class="strip-label">CURRENT MISSION</span><strong>COMMAND CENTER READY</strong></div>
+    <div><span class="strip-label">ACTIVE THREAD</span><strong>{% if active_conversation %}{{ active_conversation.title }}{% else %}NEW SESSION{% endif %}</strong></div>
+    <div><span class="strip-label">LOCAL MODE</span><strong>ENABLED</strong></div>
+  </section>
+
+  <aside class="productivity-panel" aria-label="Productivity snapshot">
+    <div class="productivity-head"><span>PERSONAL OPS</span><button id="refreshProductivity" type="button" aria-label="Refresh productivity">↻</button></div>
+    <div class="productivity-grid">
+      <div><strong id="todoCount">—</strong><span>OPEN TASKS</span></div>
+      <div><strong id="noteCount">—</strong><span>NOTES</span></div>
+      <div><strong id="reminderCount">—</strong><span>REMINDERS</span></div>
+    </div>
+    <div id="nextReminder" class="next-reminder">Syncing personal data…</div>
+  </aside>
 
   <section class="capability-rail" aria-label="Available capabilities">
     <span class="rail-label">LEVEL 01 / AVAILABLE</span>

@@ -77,3 +77,42 @@ html body .jarvis-interface .minimal-chat form{margin-top:10px;padding-top:0}.mi
 .capability-rail{position:absolute;z-index:4;left:50%;bottom:27px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;color:#70a9b9;font:8px 'DM Mono';letter-spacing:1px;white-space:nowrap}.capability-rail span:not(.rail-label){padding:5px 7px;border:1px solid rgba(46,111,132,.5);border-radius:3px;background:rgba(2,18,29,.58)}.capability-rail .rail-label{color:#397184;margin-right:5px}
 @media(max-width:800px){.capability-rail{display:none}.jarvis-footer span:last-child{display:none}}@media(max-width:520px){.audio-toggle{display:none}}
 .quick-actions{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 9px}.quick-actions button,.capability-rail button{border:1px solid rgba(67,217,239,.28);background:rgba(4,27,42,.78);color:#8ec4d2;border-radius:4px;padding:7px 10px;font:9px 'DM Mono';letter-spacing:1px;cursor:pointer;transition:.2s ease}.quick-actions button:hover,.quick-actions button:focus-visible,.capability-rail button:hover,.capability-rail button:focus-visible{border-color:var(--cyan);color:#fff;background:rgba(11,73,94,.8);box-shadow:0 0 14px rgba(67,217,239,.16);outline:none}.capability-rail button{padding:5px 7px}.is-processing .core-title b{color:var(--amber)}.is-processing .core-node{animation-duration:1s}@media(max-width:520px){.quick-actions{margin-bottom:7px}.quick-actions button{padding:6px 8px;font-size:8px}}
+.mission-strip{position:absolute;z-index:5;left:50%;top:96px;transform:translateX(-50%);width:min(720px,70vw);display:grid;grid-template-columns:1.4fr 1fr .7fr;gap:1px;border:1px solid rgba(67,217,239,.3);background:rgba(4,22,34,.72);backdrop-filter:blur(8px)}.mission-strip>div{padding:10px 13px;border-right:1px solid rgba(67,217,239,.18)}.mission-strip>div:last-child{border:0}.strip-label{display:block;color:#5f9bad;font:8px 'DM Mono';letter-spacing:1px;margin-bottom:5px}.mission-strip strong{display:block;overflow:hidden;color:#bcecf4;font:10px 'DM Mono';font-weight:500;letter-spacing:.4px;text-overflow:ellipsis;white-space:nowrap}@media(max-width:800px){.mission-strip{top:72px;width:calc(100% - 32px);grid-template-columns:1fr 1fr}.mission-strip>div:last-child{display:none}}
+.productivity-panel{position:absolute;z-index:5;left:28px;bottom:74px;width:205px;padding:12px;border:1px solid rgba(67,217,239,.28);border-radius:7px;background:rgba(3,20,32,.78);backdrop-filter:blur(8px);box-shadow:0 12px 30px rgba(0,0,0,.25)}.productivity-head{display:flex;justify-content:space-between;align-items:center;color:#83bdca;font:9px 'DM Mono';letter-spacing:1px}.productivity-head button{border:0;background:none;color:#6c9dac;font-size:18px;cursor:pointer}.productivity-head button:hover{color:var(--cyan)}.productivity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:11px 0}.productivity-grid div{padding:7px 4px;border:1px solid rgba(67,217,239,.14);text-align:center}.productivity-grid strong{display:block;color:var(--cyan);font:17px 'Space Grotesk'}.productivity-grid span{display:block;margin-top:3px;color:#668f9d;font:7px 'DM Mono'}.next-reminder{overflow:hidden;color:#82aebb;font:8px 'DM Mono';text-overflow:ellipsis;white-space:nowrap}@media(max-width:800px){.productivity-panel{left:16px;bottom:72px;width:180px}.productivity-panel{display:none}}
+/* Final command-deck polish: preserve the blueprint while improving hierarchy and touch UX. */
+.jarvis-interface .full-blueprint{opacity:.92;filter:saturate(.82) contrast(1.08) brightness(.82)}
+.jarvis-header{height:62px;padding:0 clamp(16px,3vw,42px);background:linear-gradient(180deg,rgba(2,12,22,.92),rgba(2,10,18,.66));border-bottom-color:rgba(75,211,241,.32);backdrop-filter:blur(10px)}
+.micro-brand{font-weight:600;text-shadow:0 0 16px rgba(67,217,239,.35)}
+.header-readout{padding-left:22px;border-left:1px solid rgba(67,217,239,.2)}
+.audio-toggle,.top-status .live{padding:6px 9px;border:1px solid rgba(67,217,239,.22);border-radius:999px;background:rgba(4,27,40,.5);font-size:8px;white-space:nowrap}
+.top-status .live{border-color:rgba(76,225,164,.28)}
+.avatar{box-shadow:0 0 0 1px rgba(67,217,239,.22),0 0 18px rgba(67,217,239,.16)}
+.blueprint-overlay{inset:92px clamp(18px,4vw,58px) 86px}
+.corner-data{padding:8px 10px;border-left:1px solid rgba(67,217,239,.4);background:linear-gradient(90deg,rgba(3,24,37,.55),transparent)}
+.top-right{border-left:0;border-right:1px solid rgba(67,217,239,.4);background:linear-gradient(-90deg,rgba(3,24,37,.55),transparent)}
+.side-readout{padding:10px 12px;border-top:1px solid rgba(67,217,239,.18);border-bottom:1px solid rgba(67,217,239,.18);background:rgba(2,17,27,.3)}
+.mission-strip{top:84px;width:min(780px,calc(100% - 40px));border-radius:8px;box-shadow:0 10px 35px rgba(0,0,0,.24)}
+.mission-strip>div{padding:11px 15px}
+.voice-console{top:44%;width:clamp(330px,34vw,430px);height:275px;padding:22px;border-color:rgba(67,217,239,.22);box-shadow:0 0 70px rgba(0,151,203,.08)}
+.voice-console .core-visual{height:156px}
+.voice-console .core-node{width:116px;height:116px;box-shadow:0 0 30px #16bce7,0 0 85px rgba(22,188,231,.24)}
+.voice-command{min-height:34px;padding:9px 12px;border-radius:6px;letter-spacing:.4px;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.voice-command:hover{transform:translateY(-1px)}
+.productivity-panel{position:absolute;z-index:5;left:clamp(18px,4vw,58px);bottom:86px;width:205px;padding:13px 14px;border:1px solid rgba(67,217,239,.25);border-radius:8px;background:rgba(2,18,29,.72);box-shadow:0 12px 30px rgba(0,0,0,.24);backdrop-filter:blur(8px)}
+.productivity-head{display:flex;justify-content:space-between;align-items:center;color:#8ddbe8;font-size:9px;letter-spacing:1.5px}
+.productivity-head button{border:0;background:none;color:#58cee5;font-size:17px;cursor:pointer}
+.productivity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.productivity-grid>div{padding:7px 4px;border:1px solid rgba(67,217,239,.14);border-radius:5px;text-align:center;background:rgba(4,31,46,.5)}
+.productivity-grid strong{display:block;color:#d8fbff;font:16px 'Space Grotesk'}
+.productivity-grid span{display:block;margin-top:3px;color:#59899b;font:7px 'DM Mono'}
+.next-reminder{margin-top:10px;overflow:hidden;color:#719eae;font:8px 'DM Mono';text-overflow:ellipsis;white-space:nowrap}
+.capability-rail{position:absolute;z-index:5;right:clamp(18px,4vw,58px);bottom:86px;display:flex;align-items:center;gap:10px;color:#6b9cad;font:8px 'DM Mono';letter-spacing:.7px}
+.capability-rail span:not(.rail-label){padding:7px 8px;border:1px solid rgba(67,217,239,.2);border-radius:4px;background:rgba(3,25,38,.52);color:#9adce8}
+.minimal-chat{bottom:23px;width:min(780px,calc(100% - 40px));padding:12px 15px;border-radius:10px;background:linear-gradient(145deg,rgba(4,25,40,.92),rgba(2,12,21,.88));box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 30px rgba(0,174,228,.12)}
+.minimal-chat .messages-container{min-height:52px;height:clamp(64px,10vh,112px);padding:8px 6px}
+.quick-actions{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.quick-actions button{border:1px solid rgba(67,217,239,.23);border-radius:999px;padding:6px 9px;background:rgba(4,31,46,.62);color:#84bdcc;font:8px 'DM Mono';cursor:pointer;transition:.2s ease}
+.quick-actions button:hover,.quick-actions button:focus-visible{border-color:#43d9ef;color:#c8f8ff;background:#0b3b51;outline:none}
+.transmit-bar button{min-width:88px;border-radius:5px;background:#0b526c;box-shadow:0 0 14px rgba(67,217,239,.12)}
+@media(max-width:800px){.header-readout,.blueprint-overlay .side-readout{display:none}.mission-strip{top:70px}.productivity-panel{left:14px;bottom:calc(48vh + 64px);width:190px}.capability-rail{right:14px;bottom:calc(48vh + 70px);flex-wrap:wrap;justify-content:flex-end;max-width:190px}.voice-console{top:37%;width:min(92vw,360px);height:235px}.voice-console .core-visual{height:126px}.minimal-chat{bottom:42px;width:calc(100% - 28px)}}
+@media(max-width:520px){.audio-toggle,.productivity-panel,.capability-rail{display:none}.mission-strip{width:calc(100% - 28px);grid-template-columns:1fr 1fr}.mission-strip>div{padding:9px}.voice-console{top:38%;width:calc(100% - 34px)}.minimal-chat{width:calc(100% - 20px);padding:10px}.quick-actions button{padding:6px 8px}.transmit-bar button{min-width:72px;padding:7px 6px}.jarvis-footer{left:10px;right:10px;font-size:6px}}
