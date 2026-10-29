@@ -77,6 +77,13 @@ class ChatApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['conversations'], 1)
 
+    def test_productivity_endpoint_serializes_datetime_values(self):
+        TodoItem.objects.create(title='Review dashboard')
+        response = self.client.get('/api/productivity/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['todos'][0]['title'], 'Review dashboard')
+        self.assertIsInstance(response.json()['todos'][0]['created_at'], str)
+
     def test_chat_api_accepts_valid_csrf_token(self):
         page = self.client.get("/")
         csrf_token = page.cookies["csrftoken"].value
