@@ -247,6 +247,52 @@ function setupProductivityFeatures() {
         if (event.key.toLowerCase() === 'f' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) runCommand('focus');
     });
     document.querySelectorAll('button').forEach(button => button.addEventListener('click', () => playJarvisTone('tick')));
+    setupProviderDrawer();
+    setupAudioDock();
+}
+
+function setupProviderDrawer() {
+    const drawer = document.getElementById('setupDrawer');
+    const open = document.getElementById('setupToggle');
+    const close = document.getElementById('setupClose');
+    if (!drawer || !open) return;
+    const setOpen = (visible) => {
+        drawer.hidden = !visible;
+        open.setAttribute('aria-expanded', String(visible));
+        if (visible) refreshRuntimeStatus();
+    };
+    open.addEventListener('click', () => setOpen(drawer.hidden));
+    close?.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !drawer.hidden) setOpen(false); });
+}
+
+function setupAudioDock() {
+    const dock = document.getElementById('audioDock');
+    const toggle = document.getElementById('audioToggle');
+    const volume = document.getElementById('audioVolume');
+    const value = document.getElementById('audioVolumeValue');
+    const ambient = document.getElementById('ambientToggle');
+    if (!dock || !toggle || !volume) return;
+    volume.value = localStorage.getItem('jarvis.volume') || '28';
+    const applyVolume = () => {
+        const level = Number(volume.value) / 100;
+        if (themeAudio) themeAudio.volume = level;
+        const startup = document.getElementById('startupSound');
+        if (startup) startup.volume = level;
+        if (value) value.textContent = `${volume.value}%`;
+        localStorage.setItem('jarvis.volume', volume.value);
+    };
+    applyVolume();
+    volume.addEventListener('input', applyVolume);
+    toggle.addEventListener('contextmenu', (event) => { event.preventDefault(); dock.hidden = !dock.hidden; });
+    toggle.addEventListener('dblclick', () => { dock.hidden = !dock.hidden; });
+    ambient?.addEventListener('click', () => {
+        if (!themeAudio) return;
+        themeAudio.loop = !themeAudio.loop;
+        ambient.textContent = themeAudio.loop ? 'AMBIENT LOOP ON' : 'AMBIENT LOOP OFF';
+        ambient.classList.toggle('active', themeAudio.loop);
+        if (themeAudio.loop && audioEnabled) themeAudio.play().catch(() => {});
+    });
 }
 function toggleCommandPalette() { commandPalette?.classList.toggle('hidden'); if (commandPalette && !commandPalette.classList.contains('hidden')) document.getElementById('commandSearch').focus(); }
 function closeCommandPalette() { commandPalette?.classList.add('hidden'); }
@@ -714,10 +760,17 @@ async function refreshRuntimeStatus() {
         const response = await fetch('/api/health/');
         const data = await response.json();
         const status = document.querySelector('.live');
+        const setupStatus = document.getElementById('setupStatus');
         const footerStatus = document.querySelector('.sidebar-footer b');
         const runtimePill = document.querySelector('.core-panel .pill, .core-deck .pill');
         const healthy = response.ok && data.status === 'ok';
         const runtimeState = healthy ? (data.ai_configured ? 'online' : 'setup') : 'degraded';
+        if (setupStatus) {
+            setupStatus.classList.toggle('ready', runtimeState === 'online');
+            setupStatus.querySelector('span').textContent = runtimeState === 'online'
+                ? `Gateway ready · ${data.model || 'configured model'}`
+                : runtimeState === 'setup' ? 'Database ready · API key still required' : 'Gateway unavailable · check backend logs';
+        }
         if (previousRuntimeState && previousRuntimeState !== runtimeState) {
             playJarvisTone(runtimeState === 'online' ? 'confirm' : 'warning');
             showJarvisToast(runtimeState === 'online' ? 'AI gateway connection restored.' : 'Runtime status requires attention.', runtimeState === 'online' ? 'success' : 'warning');
