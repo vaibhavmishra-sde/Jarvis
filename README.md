@@ -16,6 +16,10 @@ $env:AI_BASE_URL = "https://api.openai.com/v1"
 $env:AI_MODEL = "gpt-4o-mini"
 ```
 
+You can also use the **API SETUP** control in the command deck for the same three-step
+flow. The browser only displays whether the gateway is configured; it never receives or
+stores the secret. Never paste a live key into HTML, JavaScript, Git, or a chat prompt.
+
 For a complete local configuration reference, copy `.env.example` to your environment and replace the development secret key. In production, set `DJANGO_DEBUG=false` and provide an explicit `DJANGO_ALLOWED_HOSTS` list.
 
 Any compatible gateway can be used by changing `AI_BASE_URL` and `AI_MODEL`.
@@ -81,4 +85,5 @@ For other sites, use a full domain such as `open example.com`.
 Use Chrome or Edge on `127.0.0.1` and allow microphone access. `START VOICE` enables speech
 recognition, `SPEAK REPLIES` enables speech synthesis, and the audio control remembers mute state.
 The allowed startup theme is `frontend/static/audio/jarvis-theme.mp3` and plays once after user
-interaction because browsers block autoplay.
+interaction because browsers block autoplay. Double-click the audio status control to open
+the volume panel; the level is stored locally in the browser, and ambient looping is opt-in.

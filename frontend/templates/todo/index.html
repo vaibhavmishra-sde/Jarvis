@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>J.A.R.V.I.S. // Neural Command Deck</title>
+  <link rel="icon" href="{% static 'img/jarvis-avatar.svg' %}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,10 +22,21 @@
     </div>
     <div class="top-status">
       <span class="audio-toggle" id="audioToggle">◉ AUDIO READY</span>
+      <button class="setup-toggle" id="setupToggle" type="button" aria-expanded="false">API SETUP</button>
       <span class="live"><i></i> AI SETUP REQUIRED</span>
       <span class="top-clock" id="systemClock">00:00:00</span><div class="avatar">V</div>
     </div>
   </header>
+
+  <aside class="setup-drawer" id="setupDrawer" aria-label="AI provider setup" hidden>
+    <div class="setup-drawer-head"><div><span class="strip-label">SECURE CONFIGURATION</span><h2>Connect the intelligence layer</h2></div><button id="setupClose" type="button" aria-label="Close setup">×</button></div>
+    <p>JARVIS reads provider settings from the backend environment. Your API key never belongs in this page or in source control.</p>
+    <div class="setup-step"><span>01</span><div><b>Copy the environment template</b><code>Copy-Item .env.example .env</code></div></div>
+    <div class="setup-step"><span>02</span><div><b>Add your provider key</b><code>AI_API_KEY=sk-your-key</code></div></div>
+    <div class="setup-step"><span>03</span><div><b>Restart the backend</b><code>python backend/manage.py runserver</code></div></div>
+    <div class="setup-status" id="setupStatus"><i></i><span>Checking gateway status…</span></div>
+    <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer" class="setup-link">OPEN PROVIDER DASHBOARD ↗</a>
+  </aside>
 
   <section class="blueprint-overlay" aria-label="System telemetry">
     <div class="corner-data top-left">ARMOR PLATFORM / MK-05<br><span>NEURAL INTERFACE ACTIVE</span></div>
@@ -85,6 +97,7 @@
   <footer class="jarvis-footer"><span>SECURE LOCAL RUNTIME</span><span>MIC INPUT ENABLED</span><span>CTRL + K COMMANDS</span><span>MODEL: {{ model_name }}</span></footer>
 </main>
 <audio id="startupSound" preload="auto"><source src="{% static 'audio/jarvis-theme.mp3' %}" type="audio/mpeg"></audio>
+<div class="audio-dock" id="audioDock" hidden><label for="audioVolume">INTERFACE VOLUME <output id="audioVolumeValue">28%</output></label><input id="audioVolume" type="range" min="0" max="100" value="28" aria-label="Interface volume"><button id="ambientToggle" type="button">AMBIENT LOOP OFF</button></div>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="{% static 'js/chat.js' %}"></script>

@@ -216,12 +216,15 @@ def productivity_api(request):
     """Read-only dashboard data for tasks, notes, and pending reminders."""
     if request.method != 'GET':
         return JsonResponse({'error': 'Only GET allowed'}, status=405)
-    return JsonResponse({
+    payload = {
         'todos': list(TodoItem.objects.values('id', 'title', 'completed', 'created_at')),
         'notes': list(Note.objects.values('id', 'title', 'content', 'updated_at')[:20]),
         'reminders': list(Reminder.objects.filter(fired=False).values('id', 'title', 'due_at')[:20]),
         'memories': list(Memory.objects.values('id', 'key', 'value', 'updated_at')[:20]),
-    }, default=str)
+    }
+    # JsonResponse does not expose json.dumps' ``default`` argument. Convert
+    # ORM datetime values explicitly so this remains compatible with Django 5.
+    return JsonResponse(json.loads(json.dumps(payload, default=str)))
 
 
 def todo_api(request, todo_id):
