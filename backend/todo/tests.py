@@ -63,6 +63,14 @@ class ChatApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["database"], "ok")
 
+    @patch.dict("os.environ", {"AI_API_KEY": "test-secret-key", "AI_MODEL": "test-model"})
+    def test_health_endpoint_reports_configuration_without_exposing_key(self):
+        response = self.client.get("/api/health/")
+        payload = response.json()
+        self.assertTrue(payload["ai_configured"])
+        self.assertEqual(payload["model"], "test-model")
+        self.assertNotIn("test-secret-key", response.content.decode())
+
     def test_metrics_endpoint_reports_counts(self):
         Conversation.objects.create(title='Metrics thread')
         response = self.client.get('/api/metrics/')
